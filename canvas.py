@@ -49,8 +49,27 @@ def find_course(driver):
     print("Course found.")
 
 
-def make_self_teacher(driver):
-
+def make_self_teacher(driver, username):
+    driver.get(driver.current_url + "/users")
+    print("changed url")
+    try:
+        element = WebDriverWait(driver, 1000).until(
+            EC.element_to_be_clickable((By.ID, "addUsers"))
+        )
+    finally:
+        print("Users page loaded.")
+    add_users_button = driver.find_element_by_id("addUsers")
+    add_users_button.click()
+    try:
+        element = WebDriverWait(driver, 1000).until(
+            EC.presence_of_element_located((By.ID, "peoplesearch_radio_unique_id"))
+        )
+    finally:
+        print("Add Users dialog box opened.")
+    search_by_id_button = driver.find_element_by_id("peoplesearch_radio_unique_id")
+    search_by_id_button.click()
+    text_box = driver.find_element_by_id("TextArea__rJzWmkLDzgf")
+    text_box.sendKeys(username)
 
 
 def find_person(driver):

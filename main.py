@@ -18,8 +18,8 @@ while primary_input != 666:
     if primary_input == "1":
         canvas.find_course(driver)
         secondary_input = interface.course_sub_menu()
-        if secondary_input == 1:
-            canvas.make_self_teacher(driver)
+        if secondary_input == "1":
+            canvas.make_self_teacher(driver, username)
         if secondary_input == 666:
             primary_input = interface.main_menu()
     if primary_input == "2":
