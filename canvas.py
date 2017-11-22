@@ -2,7 +2,9 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import Select
+import time
 
 def open_safari():
     # Opens Safari and goes to Canvas.
@@ -54,12 +56,12 @@ def make_self_teacher(driver, username):
     print("changed url")
     try:
         element = WebDriverWait(driver, 1000).until(
-            EC.element_to_be_clickable((By.ID, "addUsers"))
+            EC.presence_of_element_located((By.ID, "addUsers"))
         )
     finally:
         print("Users page loaded.")
-    add_users_button = driver.find_element_by_id("addUsers")
-    add_users_button.click()
+    add_users_button = driver.find_elements_by_class_name("icon-plus")
+    driver.execute_script("$(arguments[0]).click();", add_users_button[1])
     try:
         element = WebDriverWait(driver, 1000).until(
             EC.presence_of_element_located((By.ID, "peoplesearch_radio_unique_id"))
@@ -68,8 +70,21 @@ def make_self_teacher(driver, username):
         print("Add Users dialog box opened.")
     search_by_id_button = driver.find_element_by_id("peoplesearch_radio_unique_id")
     search_by_id_button.click()
-    text_box = driver.find_element_by_id("TextArea__rJzWmkLDzgf")
-    text_box.sendKeys(username)
+    text_box = driver.find_element_by_class_name("_2ykbfrP b0-oiV6")
+    text_box.send_keys("rzimmerman")
+    role_choice_list = driver.find_element_by_class_name("_3_H4N-b")
+   # role_choice_list = Select(driver.find_element_by_class_name("_3_H4N-b"))
+   # role_choice_list.select_by_index(2)
+   # driver.execute_script("document.getElementById(" + role_choice_list.get_attribute("id") + ").value = " + "1208")
+    driver.execute_script(
+        "var select = arguments[0]; for(var i = 0; i < select.options.length; i++){ if(select.options[i].text == arguments[1]){ select.options[i].selected = true; } }",
+        role_choice_list, "Teacher");
+    time.sleep(60)
+    next_button = driver.find_element_by_id("addpeople_next")
+    next_button.click()
+    time.sleep(3)
+    next_button = driver.find_element_by_id("addpeople_next")
+    driver.execute_script("$(arguments[0]).click();", next_button)
 
 
 def find_person(driver):
